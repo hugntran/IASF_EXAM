@@ -2,12 +2,13 @@ package com.example.t2305m_springboot.controller;
 
 import com.example.t2305m_springboot.entity.Employee;
 import com.example.t2305m_springboot.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController // Thay @Controller thành @RestController
+@RestController
 @RequestMapping("/employees")
 public class EmployeeController {
 
@@ -20,17 +21,18 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public Employee saveEmployee(@RequestBody Employee employee) {
+    public Employee saveEmployee(@Valid @RequestBody Employee employee) {
         return service.saveEmployee(employee);
     }
 
     @GetMapping("/{id}")
     public Employee getEmployeeById(@PathVariable Long id) {
-        return service.getEmployeeById(id).orElseThrow(() -> new IllegalArgumentException("Invalid employee ID:" + id));
+        return service.getEmployeeById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid employee ID: " + id));
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+    public Employee updateEmployee(@PathVariable Long id, @Valid @RequestBody Employee employee) {
         employee.setId(id);
         return service.saveEmployee(employee);
     }
